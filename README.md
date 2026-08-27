@@ -18,7 +18,11 @@ npm run preview
 
 ## Content
 
-All copy (bio, projects, skills, contact details) lives in [`src/data.ts`](src/data.ts) - edit that file to update the site without touching component code. The downloadable CV is served from `public/Mahadi_Hasan_Tanmay_CV.pdf`; replace that file to update the download.
+All copy (bio, education, research, projects, skills, contact details) lives in [`src/data.ts`](src/data.ts) - edit that file to update the site without touching component code.
+
+## CV
+
+There is no static CV file. `/cv` ([`src/CVPage.tsx`](src/CVPage.tsx)) renders a print-ready resume live from the same `src/data.ts`, so it can never drift out of sync with the site - edit `data.ts` once and both the site and the CV update together. Visitors download a PDF via the page's "Download as PDF" button, which calls the browser's native print-to-PDF (`window.print()`).
 
 ## Contact form
 

@@ -7,7 +7,6 @@ export const profile = {
   githubHandle: "github.com/mahadi2002",
   linkedin: "https://linkedin.com/in/mahadi-hasan-tanmay-b5657528a",
   linkedinHandle: "linkedin.com/in/mahadi-hasan-tanmay",
-  resumeUrl: "/Mahadi_Hasan_Tanmay_CV.pdf",
 };
 
 export const education = {
@@ -16,7 +15,13 @@ export const education = {
   period: "Fall 2022 - Expected Summer 2027",
   gpa: "CGPA 3.53 / 4.00",
   notes: "Merit scholarships (Spring 2026, Spring 2023) - academic waivers (Summer 2023, Spring 2023, Fall 2022)",
+  earlier: [
+    { level: "HSC 2020", school: "Bhola Government College (Science)", result: "GPA 5.00" },
+    { level: "SSC 2018", school: "Bhola Abdur Rob High School and College (Science)", result: "GPA 4.61" },
+  ],
 };
+
+export const certifications = ["Multiple professional courses completed through MyGP Academy"];
 
 export const research = {
   title: "Agentic AI Security in Industrial Automation and Cyber-Physical Systems",
@@ -27,7 +32,7 @@ export const research = {
     "Empirically evaluating production agentic frameworks against a defined set of industrial attack scenarios to identify where current defenses fail.",
     "Addresses a gap between LLM/agent security research, which rarely covers industrial control systems, and ICS anomaly detection, which rarely assumes an adversarial or agentic threat model.",
   ],
-  footnote: "Final Year Design Project (FYDP I-III) forms the applied three-trimester track of this thesis. FYDP-I is in progress.",
+  footnote: "The Final Year Design Project (FYDP I-III) is this thesis's capstone project: a three-trimester applied track that puts the research into a working implementation. FYDP-I is in progress.",
 };
 
 export type ProjectLink = { label: string; href: string };

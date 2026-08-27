@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useMotionValueEvent, useScroll } from "motion/react";
 import { List, X, DownloadSimple } from "@phosphor-icons/react";
-import { nav, profile } from "../data";
+import { nav } from "../data";
 
 export function Nav() {
   const [open, setOpen] = useState(false);
@@ -37,8 +37,7 @@ export function Nav() {
 
         <div className="hidden items-center gap-4 lg:flex">
           <a
-            href={profile.resumeUrl}
-            download
+            href="/cv"
             className="inline-flex items-center gap-2 rounded-full border border-white/12 px-4 py-2 text-sm text-zinc-100 transition-colors hover:border-amber-400/50 hover:text-amber-300"
           >
             <DownloadSimple size={16} weight="bold" />
@@ -71,8 +70,7 @@ export function Nav() {
               </a>
             ))}
             <a
-              href={profile.resumeUrl}
-              download
+              href="/cv"
               className="mt-2 inline-flex w-fit items-center gap-2 rounded-full border border-white/12 px-4 py-2 text-sm text-zinc-100"
             >
               <DownloadSimple size={16} weight="bold" />
