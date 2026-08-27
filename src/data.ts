@@ -14,7 +14,8 @@ export const education = {
   school: "United International University, Dhaka",
   period: "Fall 2022 - Expected Summer 2027",
   gpa: "CGPA 3.53 / 4.00",
-  notes: "Merit scholarships (Spring 2026, Spring 2023) - academic waivers (Summer 2023, Spring 2023, Fall 2022)",
+  notes:
+    "Merit scholarships (Spring 2026, Spring 2023), awarded to the top 12% of the batch for that trimester's results. Academic waivers (Summer 2026, Summer 2023, Spring 2023, Fall 2022), granted for maintaining a CGPA of 3.5 or higher.",
   earlier: [
     { level: "HSC 2020", school: "Bhola Government College (Science)", result: "GPA 5.00" },
     { level: "SSC 2018", school: "Bhola Abdur Rob High School and College (Science)", result: "GPA 4.61" },
