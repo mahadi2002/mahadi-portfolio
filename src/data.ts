@@ -30,6 +30,8 @@ export const research = {
   footnote: "Final Year Design Project (FYDP I-III) forms the applied three-trimester track of this thesis. FYDP-I is in progress.",
 };
 
+export type ProjectLink = { label: string; href: string };
+
 export type Project = {
   slug: string;
   name: string;
@@ -38,7 +40,9 @@ export type Project = {
   role: string;
   stack: string[];
   points: string[];
-  link?: { label: string; href: string };
+  link?: ProjectLink;
+  sourceLink?: ProjectLink;
+  image?: string;
   size: "lg" | "md";
   accent: "amber" | "zinc" | "line";
 };
@@ -56,6 +60,7 @@ export const projects: Project[] = [
       "Queue limits, no-show timeouts, and role permissions enforced server-side rather than in the UI, with JWT authentication, bcrypt hashing, and account-status revalidation on every request.",
     ],
     link: { label: "View source", href: "https://github.com/mahadi2002/smart-hospital-queue-management-system" },
+    image: "/repo-cards/hospital-queue.png",
     size: "lg",
     accent: "amber",
   },
@@ -86,6 +91,8 @@ export const projects: Project[] = [
       "Integrated a FastAPI ML service performing sentiment and crisis analysis via Llama-3.3-70B (Groq), with SentenceTransformer embeddings and NetworkX similarity graphs for content recommendation.",
     ],
     link: { label: "View live", href: "https://neuro-link-rouge.vercel.app" },
+    sourceLink: { label: "View source", href: "https://github.com/mahadi2002/NeuroVerse" },
+    image: "/repo-cards/neuroverse.png",
     size: "md",
     accent: "zinc",
   },
@@ -104,6 +111,56 @@ export const projects: Project[] = [
     accent: "line",
   },
 ];
+
+export type Product = {
+  slug: string;
+  name: string;
+  nameBn: string;
+  tagline: string;
+  stack: string[];
+};
+
+export const productSeries = {
+  intro:
+    "Five consumer apps for Bangla-speaking users, each PHP 8.2 with no Composer dependency and billed through Robi/Airtel OTP micro-subscription. Private repositories, in active development.",
+  products: [
+    {
+      slug: "dinsathi",
+      name: "DinSathi",
+      nameBn: "দিনসাথী",
+      tagline: "Daily planner with recurring to-dos, list and tag organisation, a habit tracker with streaks, a focus timer, and a daily review.",
+      stack: ["PHP 8.2", "JavaScript", "CSS"],
+    },
+    {
+      slug: "pustisathi",
+      name: "PustiSathi",
+      nameBn: "পুষ্টিসাথী",
+      tagline: "Nutrition and diet planning by body profile, budget, region, and health conditions, plus a free BMI and food-search tier.",
+      stack: ["PHP 8.2", "JavaScript", "CSS"],
+    },
+    {
+      slug: "ielts-master-bd",
+      name: "IELTS Master BD",
+      nameBn: "শব্দ সোপান",
+      tagline: "Daily-goal IELTS vocabulary trainer using SM-2 spaced repetition, streaks, and exclusive-word rewards.",
+      stack: ["PHP 8.2 MVC", "JavaScript", "CSS"],
+    },
+    {
+      slug: "bytewise",
+      name: "Bytewise",
+      nameBn: "বাইটওয়াইজ",
+      tagline: "Interactive programming education platform, the fifth release in this product series.",
+      stack: ["PHP", "JavaScript", "CSS"],
+    },
+    {
+      slug: "gardenbondhu",
+      name: "GardenBondhu",
+      nameBn: "বাগানবন্ধু",
+      tagline: "Gardening guidance for first-time Bangla-speaking gardeners, built with zero external dependencies.",
+      stack: ["PHP 8.2"],
+    },
+  ] satisfies Product[],
+};
 
 export type SkillGroup = {
   label: string;
