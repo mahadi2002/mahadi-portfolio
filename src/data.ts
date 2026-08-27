@@ -42,7 +42,6 @@ export type Project = {
   points: string[];
   link?: ProjectLink;
   sourceLink?: ProjectLink;
-  image?: string;
   size: "lg" | "md";
   accent: "amber" | "zinc" | "line";
 };
@@ -54,30 +53,15 @@ export const projects: Project[] = [
     tagline: "Outpatient token and queue system with server-enforced role permissions",
     period: "Solo - Summer 2026",
     role: "Solo build",
-    stack: ["React 19", "FastAPI", "MongoDB", "JWT"],
+    stack: ["React 19", "React Router", "FastAPI", "MongoDB", "JWT", "Bootstrap 5"],
     points: [
       "Full-stack outpatient token and queue system with four roles (guest, patient, doctor, admin), around 35 REST endpoints across 9 routers, and 9 MongoDB collections.",
-      "Queue limits, no-show timeouts, and role permissions enforced server-side rather than in the UI, with JWT authentication, bcrypt hashing, and account-status revalidation on every request.",
+      "Three-tier design: the React client never touches the database directly, everything is fetched and written through the FastAPI layer, with four React Contexts (auth, directory, queue, notifications) holding client-side state and the queue view polling every 6 seconds for live position updates.",
+      "Queue limits, no-show timeouts, and role permissions enforced server-side rather than in the UI, with JWT authentication and bcrypt-hashed passwords.",
     ],
     link: { label: "View source", href: "https://github.com/mahadi2002/smart-hospital-queue-management-system" },
-    image: "/repo-cards/hospital-queue.png",
     size: "lg",
     accent: "amber",
-  },
-  {
-    slug: "portfolio-website",
-    name: "Personal Portfolio Website",
-    tagline: "This site: a dark, motion-aware developer portfolio built from scratch",
-    period: "Solo - 2026",
-    role: "Solo build",
-    stack: ["React 19", "Vite", "Tailwind CSS v4", "Motion", "TypeScript"],
-    points: [
-      "Custom dark-mode site with a procedural canvas node-graph hero, an asymmetric project grid, and a mailto-based contact form that needs no backend.",
-      "Content lives in a single typed data file for fast, low-risk edits, deployed via GitHub-connected CI on Vercel.",
-    ],
-    link: { label: "View source", href: "https://github.com/mahadi2002/mahadi-portfolio" },
-    size: "lg",
-    accent: "zinc",
   },
   {
     slug: "neuroverse",
@@ -85,14 +69,13 @@ export const projects: Project[] = [
     tagline: "AI-integrated student wellness platform with crisis-aware peer support",
     period: "Team of 5 - Spring 2026",
     role: "Backend coordinator & tester",
-    stack: ["Node.js", "Express", "FastAPI", "MongoDB", "Llama 3.3"],
+    stack: ["Node.js", "Express", "FastAPI", "MongoDB", "Llama 3.3", "NetworkX"],
     points: [
-      "Owned the authentication and anonymous peer-forum modules across a Node.js/Express and FastAPI hybrid architecture on MongoDB.",
-      "Integrated a FastAPI ML service performing sentiment and crisis analysis via Llama-3.3-70B (Groq), with SentenceTransformer embeddings and NetworkX similarity graphs for content recommendation.",
+      "Owned the authentication and anonymous peer-forum modules across a Node.js/Express and FastAPI hybrid architecture on MongoDB, including auto-generated anonymous aliases and nested-comment reactions for the peer forum.",
+      "Integrated a FastAPI ML service doing sentiment and crisis-keyword analysis via Llama-3.3-70B (Groq), an empathetic chatbot with crisis guardrails, a weekly log summarizer, and a DFS-based learning-path planner over a NetworkX similarity graph built from SentenceTransformer embeddings.",
     ],
     link: { label: "View live", href: "https://neuro-link-rouge.vercel.app" },
     sourceLink: { label: "View source", href: "https://github.com/mahadi2002/NeuroVerse" },
-    image: "/repo-cards/neuroverse.png",
     size: "md",
     accent: "zinc",
   },
@@ -117,47 +100,59 @@ export type Product = {
   name: string;
   nameBn: string;
   tagline: string;
+  detail: string;
   stack: string[];
+  link: ProjectLink;
 };
 
 export const productSeries = {
   intro:
-    "Five consumer apps for Bangla-speaking users, each PHP 8.2 with no Composer dependency and billed through Robi/Airtel OTP micro-subscription. Private repositories, in active development.",
+    "Five free, Bangla-first web apps built in order on the same hand-rolled foundation: PHP 8.2 with zero Composer dependencies, a custom MVC (router, middleware, controllers, services, repositories), MySQL/MariaDB with database-backed sessions, and vanilla JS with no bundler. Each release reused and refined the architecture of the one before it.",
   products: [
     {
-      slug: "dinsathi",
-      name: "DinSathi",
-      nameBn: "দিনসাথী",
-      tagline: "Daily planner with recurring to-dos, list and tag organisation, a habit tracker with streaks, a focus timer, and a daily review.",
-      stack: ["PHP 8.2", "JavaScript", "CSS"],
-    },
-    {
-      slug: "pustisathi",
-      name: "PustiSathi",
-      nameBn: "পুষ্টিসাথী",
-      tagline: "Nutrition and diet planning by body profile, budget, region, and health conditions, plus a free BMI and food-search tier.",
-      stack: ["PHP 8.2", "JavaScript", "CSS"],
+      slug: "gardenbondhu",
+      name: "GardenBondhu",
+      nameBn: "বাগানবন্ধু",
+      tagline: "Gardening guidance for first-time Bangla-speaking gardeners.",
+      detail: "Plant care guides, a leaf-symptom checker, and a personal garden log with watering and fertilizing reminders. First app in the series, and the one that set the architecture the other four reused.",
+      stack: ["PHP 8.2", "MySQL", "Vanilla JS"],
+      link: { label: "View source", href: "https://github.com/mahadi2002/gardenbondhu" },
     },
     {
       slug: "ielts-master-bd",
       name: "IELTS Master BD",
       nameBn: "শব্দ সোপান",
-      tagline: "Daily-goal IELTS vocabulary trainer using SM-2 spaced repetition, streaks, and exclusive-word rewards.",
-      stack: ["PHP 8.2 MVC", "JavaScript", "CSS"],
+      tagline: "Daily-goal IELTS vocabulary trainer for Bangladeshi learners.",
+      detail: "Spaced-repetition review, band-tagged word lists, quizzes, and a study calendar. Documented in depth: separate architecture, routes, database, security, and deployment docs.",
+      stack: ["PHP 8.2 MVC", "MySQL", "Vanilla JS"],
+      link: { label: "View source", href: "https://github.com/mahadi2002/ielts-master-bd" },
+    },
+    {
+      slug: "pustisathi",
+      name: "PustiSathi",
+      nameBn: "পুষ্টিসাথী",
+      tagline: "Nutrition and diet planning by body profile, budget, and region.",
+      detail: "A free BMI and calorie estimate feeds a personalized diet plan, plus a patient-nutritionist matching and messaging loop. Its rule engine and diet-plan engine are the one part of the codebase written specifically for this domain rather than reused from the series.",
+      stack: ["PHP 8.2", "MySQL", "Vanilla JS"],
+      link: { label: "View source", href: "https://github.com/mahadi2002/pustisathi" },
+    },
+    {
+      slug: "dinsathi",
+      name: "DinSathi",
+      nameBn: "দিনসাথী",
+      tagline: "Daily planner with recurring to-dos and a habit tracker.",
+      detail: "Tasks, lists and tags, a streak-based habit tracker, a focus timer, and a daily review, with a service worker for web push notifications.",
+      stack: ["PHP 8.2", "MySQL", "Vanilla JS"],
+      link: { label: "View source", href: "https://github.com/mahadi2002/dinsathi" },
     },
     {
       slug: "bytewise",
       name: "Bytewise",
       nameBn: "বাইটওয়াইজ",
-      tagline: "Interactive programming education platform, the fifth release in this product series.",
-      stack: ["PHP", "JavaScript", "CSS"],
-    },
-    {
-      slug: "gardenbondhu",
-      name: "GardenBondhu",
-      nameBn: "বাগানবন্ধু",
-      tagline: "Gardening guidance for first-time Bangla-speaking gardeners, built with zero external dependencies.",
-      stack: ["PHP 8.2"],
+      tagline: "Interactive programming education platform for beginners.",
+      detail: "Structured tracks from C through Data Structures and Algorithms, inline quizzes, a skill tree, and online code execution. Fifth in the series, with 14 of 15 planned build phases verified end-to-end against a live database.",
+      stack: ["PHP 8.2", "MySQL", "Vanilla JS"],
+      link: { label: "View source", href: "https://github.com/mahadi2002/bytewise" },
     },
   ] satisfies Product[],
 };

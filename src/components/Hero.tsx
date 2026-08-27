@@ -8,7 +8,10 @@ export function Hero() {
 
   return (
     <section id="top" className="relative flex min-h-[100dvh] items-center overflow-hidden border-b border-white/8">
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(9,9,11,0)_0%,rgba(9,9,11,0.6)_100%)]" />
+      <div className="pointer-events-none absolute inset-0 opacity-25">
+        <NetworkGraph />
+      </div>
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(9,9,11,0.2)_0%,rgba(9,9,11,0.75)_100%)]" />
 
       <div className="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-12 px-6 pt-24 pb-16 lg:grid-cols-[1.1fr_0.9fr] lg:gap-8 lg:pt-24">
         <motion.div
@@ -77,11 +80,14 @@ export function Hero() {
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
           className="relative aspect-square w-full max-w-md justify-self-center lg:justify-self-end"
         >
-          <div className="absolute inset-0 rounded-2xl border border-white/8 bg-zinc-900/40" />
-          <div className="absolute inset-0 overflow-hidden rounded-2xl">
-            <NetworkGraph />
+          <div className="absolute inset-0 overflow-hidden rounded-2xl border border-white/10 bg-zinc-900/40">
+            <img
+              src="/mahadi.jpg"
+              alt="Mahadi Hasan Tanmay"
+              className="h-full w-full object-cover object-[50%_15%]"
+            />
           </div>
-          <div className="pointer-events-none absolute inset-0 rounded-2xl shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]" />
+          <div className="pointer-events-none absolute inset-0 rounded-2xl shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]" />
         </motion.div>
       </div>
     </section>

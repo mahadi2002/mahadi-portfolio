@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from "motion/react";
-import { LockSimple } from "@phosphor-icons/react";
+import { GithubLogo } from "@phosphor-icons/react";
 import { productSeries } from "../data";
 
 export function Products() {
@@ -23,7 +23,7 @@ export function Products() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.5 }}
           transition={{ duration: 0.5, delay: 0.05 }}
-          className="mt-4 max-w-[65ch] text-sm leading-relaxed text-zinc-500"
+          className="mt-4 max-w-[70ch] text-sm leading-relaxed text-zinc-500"
         >
           {productSeries.intro}
         </motion.p>
@@ -43,15 +43,20 @@ export function Products() {
                   <h3 className="text-lg font-semibold text-zinc-50">{product.name}</h3>
                   <p className="mt-0.5 text-sm text-zinc-500">{product.nameBn}</p>
                 </div>
-                <span
-                  title="Private repository"
-                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/12 text-zinc-500"
+                <a
+                  href={product.link.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={product.link.label}
+                  title={product.link.label}
+                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/12 text-zinc-400 transition-colors hover:border-amber-400/50 hover:text-amber-300"
                 >
-                  <LockSimple size={14} />
-                </span>
+                  <GithubLogo size={14} />
+                </a>
               </div>
 
-              <p className="mt-4 text-sm leading-relaxed text-zinc-400">{product.tagline}</p>
+              <p className="mt-4 text-sm font-medium leading-relaxed text-zinc-200">{product.tagline}</p>
+              <p className="mt-2 text-sm leading-relaxed text-zinc-500">{product.detail}</p>
 
               <div className="mt-auto flex flex-wrap gap-2 pt-6">
                 {product.stack.map((tech) => (

@@ -35,56 +35,42 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.25 }}
       transition={{ duration: 0.6, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
-      className={`group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 ${backgrounds[project.accent]} ${
-        isLarge ? "md:col-span-2" : ""
+      className={`group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 p-7 ${backgrounds[project.accent]} ${
+        isLarge ? "md:col-span-2 md:p-9" : ""
       }`}
     >
-      {project.image && (
-        <div className="relative aspect-[2/1] w-full overflow-hidden border-b border-white/10">
-          <img
-            src={project.image}
-            alt={`${project.name} repository preview`}
-            loading="lazy"
-            className="h-full w-full object-cover object-top"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent" />
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h3 className={`font-semibold tracking-tight text-zinc-50 ${isLarge ? "text-2xl md:text-3xl" : "text-xl"}`}>
+            {project.name}
+          </h3>
+          <p className="mt-2 max-w-md text-sm leading-relaxed text-zinc-400">{project.tagline}</p>
         </div>
-      )}
-
-      <div className={`flex flex-1 flex-col p-7 ${isLarge ? "md:p-9" : ""}`}>
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <h3 className={`font-semibold tracking-tight text-zinc-50 ${isLarge ? "text-2xl md:text-3xl" : "text-xl"}`}>
-              {project.name}
-            </h3>
-            <p className="mt-2 max-w-md text-sm leading-relaxed text-zinc-400">{project.tagline}</p>
-          </div>
-          <div className="flex shrink-0 items-center gap-2">
-            <LinkButton link={project.link} />
-            <LinkButton link={project.sourceLink} />
-          </div>
+        <div className="flex shrink-0 items-center gap-2">
+          <LinkButton link={project.link} />
+          <LinkButton link={project.sourceLink} />
         </div>
+      </div>
 
-        <p className="mt-6 font-mono text-xs text-zinc-500">{project.period}</p>
+      <p className="mt-6 font-mono text-xs text-zinc-500">{project.period}</p>
 
-        <ul className={`mt-4 space-y-2 ${isLarge ? "md:max-w-2xl" : ""}`}>
-          {project.points.map((point) => (
-            <li key={point.slice(0, 20)} className="text-sm leading-relaxed text-zinc-400">
-              {point}
-            </li>
-          ))}
-        </ul>
+      <ul className={`mt-4 space-y-2 ${isLarge ? "md:max-w-2xl" : ""}`}>
+        {project.points.map((point) => (
+          <li key={point.slice(0, 20)} className="text-sm leading-relaxed text-zinc-400">
+            {point}
+          </li>
+        ))}
+      </ul>
 
-        <div className="mt-auto flex flex-wrap gap-2 pt-7">
-          {project.stack.map((tech) => (
-            <span
-              key={tech}
-              className="rounded-full border border-white/10 px-3 py-1 font-mono text-[11px] text-zinc-400"
-            >
-              {tech}
-            </span>
-          ))}
-        </div>
+      <div className="mt-auto flex flex-wrap gap-2 pt-7">
+        {project.stack.map((tech) => (
+          <span
+            key={tech}
+            className="rounded-full border border-white/10 px-3 py-1 font-mono text-[11px] text-zinc-400"
+          >
+            {tech}
+          </span>
+        ))}
       </div>
     </motion.article>
   );
