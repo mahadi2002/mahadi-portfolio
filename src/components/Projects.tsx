@@ -69,7 +69,6 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
 export function Projects() {
   const reduce = useReducedMotion();
-  const [featured, ...rest] = projects;
 
   return (
     <section id="projects" className="border-b border-white/8 bg-zinc-950 py-24 md:py-32">
@@ -85,9 +84,8 @@ export function Projects() {
         </motion.h2>
 
         <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2">
-          <ProjectCard project={featured} index={0} />
-          {rest.map((project, i) => (
-            <ProjectCard key={project.slug} project={project} index={i + 1} />
+          {projects.map((project, i) => (
+            <ProjectCard key={project.slug} project={project} index={i} />
           ))}
         </div>
       </div>

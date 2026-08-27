@@ -60,6 +60,21 @@ export const projects: Project[] = [
     accent: "amber",
   },
   {
+    slug: "portfolio-website",
+    name: "Personal Portfolio Website",
+    tagline: "This site: a dark, motion-aware developer portfolio built from scratch",
+    period: "Solo - 2026",
+    role: "Solo build",
+    stack: ["React 19", "Vite", "Tailwind CSS v4", "Motion", "TypeScript"],
+    points: [
+      "Custom dark-mode site with a procedural canvas node-graph hero, an asymmetric project grid, and a mailto-based contact form that needs no backend.",
+      "Content lives in a single typed data file for fast, low-risk edits, deployed via GitHub-connected CI on Vercel.",
+    ],
+    link: { label: "View source", href: "https://github.com/mahadi2002/mahadi-portfolio" },
+    size: "lg",
+    accent: "zinc",
+  },
+  {
     slug: "neuroverse",
     name: "NeuroVerse",
     tagline: "AI-integrated student wellness platform with crisis-aware peer support",
