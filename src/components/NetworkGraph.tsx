@@ -10,7 +10,8 @@ type Node = {
 /**
  * Procedural node-graph animation for the hero. Stands in for a personal
  * photo (none available) and echoes the thesis subject: agent networks and
- * anomaly detection. Pauses entirely under prefers-reduced-motion.
+ * anomaly detection. Pauses under prefers-reduced-motion, and pauses the
+ * animation loop whenever the canvas scrolls out of view.
  */
 export function NetworkGraph() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -28,6 +29,7 @@ export function NetworkGraph() {
     let dpr = Math.min(window.devicePixelRatio || 1, 2);
     let nodes: Node[] = [];
     let raf = 0;
+    let pulse = 0;
     let activeIndex = 0;
 
     const NODE_COUNT = 34;
@@ -115,35 +117,55 @@ export function NetworkGraph() {
       raf = requestAnimationFrame(tick);
     }
 
+    function start() {
+      if (raf || reduceMotion) return;
+      raf = requestAnimationFrame(tick);
+      pulse = window.setInterval(() => {
+        activeIndex = Math.floor(Math.random() * nodes.length);
+      }, 1400);
+    }
+
+    function stop() {
+      cancelAnimationFrame(raf);
+      window.clearInterval(pulse);
+      raf = 0;
+      pulse = 0;
+    }
+
     resize();
     seed();
 
     if (reduceMotion) {
       drawStatic();
-    } else {
-      raf = requestAnimationFrame(tick);
-      const pulse = window.setInterval(() => {
-        activeIndex = Math.floor(Math.random() * nodes.length);
-      }, 1400);
-      const onResize = () => {
+      const onResizeStatic = () => {
         resize();
         seed();
+        drawStatic();
       };
-      window.addEventListener("resize", onResize);
-      return () => {
-        cancelAnimationFrame(raf);
-        window.clearInterval(pulse);
-        window.removeEventListener("resize", onResize);
-      };
+      window.addEventListener("resize", onResizeStatic);
+      return () => window.removeEventListener("resize", onResizeStatic);
     }
 
-    const onResizeStatic = () => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) start();
+        else stop();
+      },
+      { threshold: 0 },
+    );
+    observer.observe(canvas);
+
+    const onResize = () => {
       resize();
       seed();
-      drawStatic();
     };
-    window.addEventListener("resize", onResizeStatic);
-    return () => window.removeEventListener("resize", onResizeStatic);
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      stop();
+      observer.disconnect();
+      window.removeEventListener("resize", onResize);
+    };
   }, []);
 
   return <canvas ref={canvasRef} className="h-full w-full" aria-hidden="true" />;

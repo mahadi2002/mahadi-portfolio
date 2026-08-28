@@ -1,4 +1,6 @@
-import { motion, useReducedMotion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
+import { animate, motion, useInView, useReducedMotion } from "motion/react";
+import { EASE_OUT } from "../lib/motion";
 import { certifications, education, languages, projects, productSeries } from "../data";
 
 const stats = [
@@ -6,6 +8,32 @@ const stats = [
   { value: education.gpa.replace("CGPA ", ""), label: "Undergraduate CGPA" },
   { value: "1", label: "Undergraduate thesis, in progress" },
 ];
+
+/** Counts up to an integer value once it scrolls into view. Non-integer values (e.g. "3.53 / 4.00") render as static text. */
+function StatValue({ value }: { value: string }) {
+  const reduce = useReducedMotion();
+  const ref = useRef<HTMLParagraphElement>(null);
+  const inView = useInView(ref, { once: true, amount: 0.6 });
+  const target = Number(value);
+  const isCountable = Number.isInteger(target) && !reduce;
+  const [display, setDisplay] = useState(isCountable ? 0 : value);
+
+  useEffect(() => {
+    if (!isCountable || !inView) return;
+    const controls = animate(0, target, {
+      duration: 1,
+      ease: EASE_OUT,
+      onUpdate: (latest) => setDisplay(String(Math.round(latest))),
+    });
+    return () => controls.stop();
+  }, [inView, isCountable, target]);
+
+  return (
+    <p ref={ref} className="font-mono text-3xl font-medium text-amber-400 md:text-4xl">
+      {display}
+    </p>
+  );
+}
 
 export function About() {
   const reduce = useReducedMotion();
@@ -17,7 +45,7 @@ export function About() {
           initial={reduce ? false : { opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.4 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.6, ease: EASE_OUT }}
           className="text-balance text-2xl leading-relaxed text-zinc-300 md:text-3xl"
         >
           I'm a computer science undergraduate who splits time between
@@ -27,38 +55,38 @@ export function About() {
           attack.
         </motion.p>
 
-        <motion.div
-          initial={reduce ? false : { opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.4 }}
-          transition={{ duration: 0.6, delay: 0.06, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-14 grid grid-cols-3 gap-6 border-t border-white/8 pt-10"
-        >
-          {stats.map((stat) => (
-            <div key={stat.label}>
-              <p className="font-mono text-3xl font-medium text-amber-400 md:text-4xl">{stat.value}</p>
-              <p className="mt-1.5 text-xs leading-snug text-zinc-500 md:text-sm">{stat.label}</p>
-            </div>
+        <div className="mt-14 grid grid-cols-3 gap-6 border-t border-white/8 pt-10">
+          {stats.map((stat, i) => (
+            <motion.div
+              key={stat.label}
+              initial={reduce ? false : { opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{ duration: 0.5, delay: 0.06 + i * 0.06, ease: EASE_OUT }}
+            >
+              <StatValue value={stat.value} />
+              <p className="mt-1.5 text-xs leading-snug text-ink-dim md:text-sm">{stat.label}</p>
+            </motion.div>
           ))}
-        </motion.div>
+        </div>
 
         <motion.div
           initial={reduce ? false : { opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.4 }}
-          transition={{ duration: 0.6, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.6, delay: 0.12, ease: EASE_OUT }}
           className="mt-14 grid grid-cols-1 gap-8 border-t border-white/8 pt-10 sm:grid-cols-3"
         >
           <div>
-            <p className="font-mono text-xs uppercase tracking-[0.14em] text-zinc-600">Education</p>
+            <p className="font-mono text-xs uppercase tracking-[0.14em] text-ink-dim">Education</p>
             <p className="mt-3 text-base text-zinc-100">{education.degree}</p>
-            <p className="mt-1 text-sm text-zinc-500">{education.school}</p>
-            <p className="mt-1 text-sm text-zinc-500">{education.period}</p>
+            <p className="mt-1 text-sm text-ink-dim">{education.school}</p>
+            <p className="mt-1 text-sm text-ink-dim">{education.period}</p>
             <p className="mt-1 font-mono text-sm text-amber-400/90">{education.gpa}</p>
-            <p className="mt-2 text-xs leading-relaxed text-zinc-600">{education.notes}</p>
+            <p className="mt-2 text-xs leading-relaxed text-ink-dim">{education.notes}</p>
             <ul className="mt-3 space-y-0.5">
               {education.earlier.map((e) => (
-                <li key={e.level} className="text-xs text-zinc-600">
+                <li key={e.level} className="text-xs text-ink-dim">
                   {e.level} - {e.school}, {e.result}
                 </li>
               ))}
@@ -66,16 +94,16 @@ export function About() {
           </div>
 
           <div>
-            <p className="font-mono text-xs uppercase tracking-[0.14em] text-zinc-600">Languages</p>
+            <p className="font-mono text-xs uppercase tracking-[0.14em] text-ink-dim">Languages</p>
             <ul className="mt-3 space-y-1.5">
               {languages.map((l) => (
                 <li key={l.name} className="text-sm text-zinc-300">
-                  {l.name} <span className="text-zinc-600">- {l.level}</span>
+                  {l.name} <span className="text-ink-dim">- {l.level}</span>
                 </li>
               ))}
             </ul>
 
-            <p className="mt-6 font-mono text-xs uppercase tracking-[0.14em] text-zinc-600">Certifications</p>
+            <p className="mt-6 font-mono text-xs uppercase tracking-[0.14em] text-ink-dim">Certifications</p>
             <p className="mt-3 text-sm leading-relaxed text-zinc-300">{certifications.summary}</p>
             <a href="/cv" className="mt-1.5 inline-block text-sm text-amber-400/90 hover:text-amber-300">
               View all {certifications.items.length} on the CV
@@ -83,9 +111,9 @@ export function About() {
           </div>
 
           <div>
-            <p className="font-mono text-xs uppercase tracking-[0.14em] text-zinc-600">Based in</p>
+            <p className="font-mono text-xs uppercase tracking-[0.14em] text-ink-dim">Based in</p>
             <p className="mt-3 text-sm text-zinc-300">Dhaka, Bangladesh</p>
-            <p className="mt-1 text-sm text-zinc-500">Open to remote and on-site roles</p>
+            <p className="mt-1 text-sm text-ink-dim">Open to remote and on-site roles</p>
           </div>
         </motion.div>
       </div>

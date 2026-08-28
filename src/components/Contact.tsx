@@ -1,7 +1,13 @@
-import { useState, type FormEvent } from "react";
-import { motion, useReducedMotion } from "motion/react";
+import { useRef, useState, type FormEvent } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { EASE_OUT } from "../lib/motion";
 import { EnvelopeSimple, GithubLogo, LinkedinLogo, Phone, Check } from "@phosphor-icons/react";
 import { profile } from "../data";
+
+// TODO: replace with your real Formspree endpoint (formspree.io -> new form -> "Your form endpoint").
+// Until this is set, submissions fall back to opening the visitor's mail client instead.
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
+const FORMSPREE_CONFIGURED = !FORMSPREE_ENDPOINT.includes("YOUR_FORM_ID");
 
 type FormState = {
   name: string;
@@ -10,6 +16,7 @@ type FormState = {
 };
 
 type Errors = Partial<Record<keyof FormState, string>>;
+type Status = "idle" | "sending" | "sent" | "sent-fallback" | "error";
 
 const initialState: FormState = { name: "", email: "", message: "" };
 
@@ -17,8 +24,13 @@ export function Contact() {
   const reduce = useReducedMotion();
   const [form, setForm] = useState<FormState>(initialState);
   const [errors, setErrors] = useState<Errors>({});
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState<Status>("idle");
   const [copied, setCopied] = useState(false);
+
+  const nameRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const messageRef = useRef<HTMLTextAreaElement>(null);
+  const fieldRefs = { name: nameRef, email: emailRef, message: messageRef };
 
   function validate(values: FormState): Errors {
     const next: Errors = {};
@@ -32,17 +44,42 @@ export function Contact() {
     return next;
   }
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const nextErrors = validate(form);
     setErrors(nextErrors);
-    if (Object.keys(nextErrors).length > 0) return;
 
-    const subject = encodeURIComponent(`Portfolio contact from ${form.name}`);
-    const body = encodeURIComponent(`${form.message}\n\n- ${form.name} (${form.email})`);
-    window.location.href = `mailto:${profile.email}?subject=${subject}&body=${body}`;
-    setSent(true);
-    setForm(initialState);
+    const firstInvalid = (Object.keys(nextErrors) as (keyof FormState)[])[0];
+    if (firstInvalid) {
+      fieldRefs[firstInvalid].current?.focus();
+      return;
+    }
+
+    if (!FORMSPREE_CONFIGURED) {
+      const subject = encodeURIComponent(`Portfolio contact from ${form.name}`);
+      const body = encodeURIComponent(`${form.message}\n\n- ${form.name} (${form.email})`);
+      window.location.href = `mailto:${profile.email}?subject=${subject}&body=${body}`;
+      setStatus("sent-fallback");
+      setForm(initialState);
+      return;
+    }
+
+    setStatus("sending");
+    try {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: { Accept: "application/json" },
+        body: new FormData(e.currentTarget),
+      });
+      if (res.ok) {
+        setStatus("sent");
+        setForm(initialState);
+      } else {
+        setStatus("error");
+      }
+    } catch {
+      setStatus("error");
+    }
   }
 
   async function copyEmail() {
@@ -55,6 +92,8 @@ export function Contact() {
     }
   }
 
+  const errorCount = Object.keys(errors).length;
+
   return (
     <section id="contact" className="bg-zinc-950 py-24 md:py-32">
       <div className="mx-auto grid max-w-5xl grid-cols-1 gap-14 px-6 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
@@ -62,14 +101,14 @@ export function Contact() {
           initial={reduce ? false : { opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.4 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.6, ease: EASE_OUT }}
+          className="order-2 lg:order-none"
         >
           <h2 className="text-balance text-3xl font-semibold tracking-tight text-zinc-50 md:text-4xl">
             Open to new roles and collaborations.
           </h2>
           <p className="mt-4 max-w-[42ch] text-base leading-relaxed text-zinc-400">
-            Reach out directly, or send a message and it'll open in your mail
-            client, addressed straight to me.
+            Reach out directly, or send a message below.
           </p>
 
           <div className="mt-9 space-y-4">
@@ -80,8 +119,31 @@ export function Contact() {
             >
               <EnvelopeSimple size={18} className="shrink-0 text-amber-400" />
               <span className="truncate">{profile.email}</span>
-              <span className="ml-auto shrink-0 font-mono text-xs text-zinc-600">
-                {copied ? <span className="inline-flex items-center gap-1 text-amber-300"><Check size={12} /> Copied</span> : "Copy"}
+              <span className="ml-auto shrink-0 font-mono text-xs text-ink-dim">
+                <AnimatePresence mode="wait" initial={false}>
+                  {copied ? (
+                    <motion.span
+                      key="copied"
+                      initial={reduce ? false : { opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.15 }}
+                      className="inline-flex items-center gap-1 text-amber-300"
+                    >
+                      <Check size={12} /> Copied
+                    </motion.span>
+                  ) : (
+                    <motion.span
+                      key="copy"
+                      initial={reduce ? false : { opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.15 }}
+                    >
+                      Copy
+                    </motion.span>
+                  )}
+                </AnimatePresence>
               </span>
             </button>
 
@@ -119,30 +181,48 @@ export function Contact() {
           initial={reduce ? false : { opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.4 }}
-          transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.6, delay: 0.1, ease: EASE_OUT }}
           onSubmit={handleSubmit}
           noValidate
-          className="space-y-5 rounded-2xl border border-white/10 bg-white/[0.02] p-7 md:p-8"
+          className="order-1 space-y-5 rounded-2xl border border-white/10 bg-white/[0.02] p-7 md:p-8 lg:order-none"
         >
+          <p aria-live="polite" className="sr-only">
+            {errorCount > 0 ? `${errorCount} field${errorCount > 1 ? "s" : ""} need attention.` : ""}
+            {status === "sent" ? "Message sent." : ""}
+            {status === "error" ? "Message failed to send. Please try again or use the email above." : ""}
+          </p>
+
           <div className="space-y-2">
             <label htmlFor="name" className="block text-sm text-zinc-300">
               Name
             </label>
             <input
+              ref={nameRef}
               id="name"
+              name="name"
               type="text"
+              maxLength={100}
               value={form.name}
               onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-              className="w-full rounded-lg border border-white/12 bg-zinc-950 px-4 py-3 text-sm text-zinc-100 placeholder:text-zinc-600 focus:border-amber-400/60 focus:outline-none focus:ring-2 focus:ring-amber-400/30"
+              className="w-full rounded-lg border border-white/12 bg-zinc-950 px-4 py-3 text-sm text-zinc-100 placeholder:text-ink-dim focus:border-amber-400/60 focus:outline-none focus:ring-2 focus:ring-amber-400/30"
               placeholder="Jane Rahman"
               aria-invalid={Boolean(errors.name)}
               aria-describedby={errors.name ? "name-error" : undefined}
             />
-            {errors.name && (
-              <p id="name-error" className="text-xs text-amber-300">
-                {errors.name}
-              </p>
-            )}
+            <AnimatePresence initial={false}>
+              {errors.name && (
+                <motion.p
+                  id="name-error"
+                  initial={reduce ? false : { opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.15 }}
+                  className="text-xs text-amber-300"
+                >
+                  {errors.name}
+                </motion.p>
+              )}
+            </AnimatePresence>
           </div>
 
           <div className="space-y-2">
@@ -150,20 +230,32 @@ export function Contact() {
               Email
             </label>
             <input
+              ref={emailRef}
               id="email"
+              name="email"
               type="email"
+              maxLength={150}
               value={form.email}
               onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-              className="w-full rounded-lg border border-white/12 bg-zinc-950 px-4 py-3 text-sm text-zinc-100 placeholder:text-zinc-600 focus:border-amber-400/60 focus:outline-none focus:ring-2 focus:ring-amber-400/30"
+              className="w-full rounded-lg border border-white/12 bg-zinc-950 px-4 py-3 text-sm text-zinc-100 placeholder:text-ink-dim focus:border-amber-400/60 focus:outline-none focus:ring-2 focus:ring-amber-400/30"
               placeholder="jane@company.com"
               aria-invalid={Boolean(errors.email)}
               aria-describedby={errors.email ? "email-error" : undefined}
             />
-            {errors.email && (
-              <p id="email-error" className="text-xs text-amber-300">
-                {errors.email}
-              </p>
-            )}
+            <AnimatePresence initial={false}>
+              {errors.email && (
+                <motion.p
+                  id="email-error"
+                  initial={reduce ? false : { opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.15 }}
+                  className="text-xs text-amber-300"
+                >
+                  {errors.email}
+                </motion.p>
+              )}
+            </AnimatePresence>
           </div>
 
           <div className="space-y-2">
@@ -171,34 +263,77 @@ export function Contact() {
               Message
             </label>
             <textarea
+              ref={messageRef}
               id="message"
+              name="message"
               rows={5}
+              maxLength={2000}
               value={form.message}
               onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
-              className="w-full resize-none rounded-lg border border-white/12 bg-zinc-950 px-4 py-3 text-sm text-zinc-100 placeholder:text-zinc-600 focus:border-amber-400/60 focus:outline-none focus:ring-2 focus:ring-amber-400/30"
+              className="w-full resize-none rounded-lg border border-white/12 bg-zinc-950 px-4 py-3 text-sm text-zinc-100 placeholder:text-ink-dim focus:border-amber-400/60 focus:outline-none focus:ring-2 focus:ring-amber-400/30"
               placeholder="What are you working on?"
               aria-invalid={Boolean(errors.message)}
               aria-describedby={errors.message ? "message-error" : undefined}
             />
-            {errors.message && (
-              <p id="message-error" className="text-xs text-amber-300">
-                {errors.message}
-              </p>
-            )}
+            <AnimatePresence initial={false}>
+              {errors.message && (
+                <motion.p
+                  id="message-error"
+                  initial={reduce ? false : { opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.15 }}
+                  className="text-xs text-amber-300"
+                >
+                  {errors.message}
+                </motion.p>
+              )}
+            </AnimatePresence>
           </div>
 
           <button
             type="submit"
-            className="w-full rounded-lg bg-amber-400 px-6 py-3 text-sm font-medium text-zinc-950 transition-transform active:scale-[0.98] hover:bg-amber-300"
+            disabled={status === "sending"}
+            className="w-full rounded-lg bg-amber-400 px-6 py-3 text-sm font-medium text-zinc-950 transition-transform active:scale-[0.98] hover:bg-amber-300 disabled:opacity-60"
           >
-            Send message
+            {status === "sending" ? "Sending..." : "Send message"}
           </button>
 
-          {sent && (
-            <p className="text-center text-xs text-zinc-500">
-              Your mail client should have opened with this addressed to me. If nothing happened, email {profile.email} directly.
-            </p>
-          )}
+          <AnimatePresence initial={false}>
+            {status === "sent" && (
+              <motion.p
+                initial={reduce ? false : { opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.2 }}
+                className="text-center text-xs text-amber-300"
+              >
+                Message sent, thanks. I'll get back to you soon.
+              </motion.p>
+            )}
+            {status === "sent-fallback" && (
+              <motion.p
+                initial={reduce ? false : { opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.2 }}
+                className="text-center text-xs text-ink-dim"
+              >
+                Your mail client should have opened with this addressed to me. If nothing happened, use the email above instead.
+              </motion.p>
+            )}
+            {status === "error" && (
+              <motion.p
+                initial={reduce ? false : { opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.2 }}
+                className="text-center text-xs text-amber-300"
+              >
+                Something went wrong sending that. Please try again, or email {profile.email} directly.
+              </motion.p>
+            )}
+          </AnimatePresence>
         </motion.form>
       </div>
     </section>

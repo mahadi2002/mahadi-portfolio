@@ -15,6 +15,9 @@ dist-ssr
 # Claude Code agent scratch/worktree directories
 .claude/
 
+# Impeccable design-critique snapshots (local audit archive, not site content)
+.impeccable/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

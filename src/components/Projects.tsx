@@ -1,4 +1,5 @@
 import { motion, useReducedMotion } from "motion/react";
+import { EASE_OUT } from "../lib/motion";
 import { ArrowUpRight, GithubLogo } from "@phosphor-icons/react";
 import { projects, type Project } from "../data";
 
@@ -18,7 +19,7 @@ function LinkButton({ link }: { link: Project["link"] }) {
       rel="noreferrer"
       aria-label={`${link.label}`}
       title={link.label}
-      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/12 text-zinc-400 transition-colors hover:border-amber-400/50 hover:text-amber-300"
+      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/12 text-zinc-400 transition-colors hover:border-amber-400/50 hover:text-amber-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"
     >
       {link.href.includes("github.com") ? <GithubLogo size={16} /> : <ArrowUpRight size={16} />}
     </a>
@@ -34,8 +35,8 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       initial={reduce ? false : { opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.25 }}
-      transition={{ duration: 0.6, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
-      className={`group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 p-7 ${backgrounds[project.accent]} ${
+      transition={{ duration: 0.6, delay: index * 0.08, ease: EASE_OUT }}
+      className={`relative flex flex-col overflow-hidden rounded-2xl border border-white/10 p-7 transition duration-200 hover:border-white/20 motion-safe:hover:-translate-y-1 ${backgrounds[project.accent]} ${
         isLarge ? "md:col-span-2 md:p-9" : ""
       }`}
     >
@@ -52,7 +53,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         </div>
       </div>
 
-      <p className="mt-6 font-mono text-xs text-zinc-500">{project.period}</p>
+      <p className="mt-6 font-mono text-xs text-ink-dim">{project.period}</p>
 
       <ul className={`mt-4 space-y-2 ${isLarge ? "md:max-w-2xl" : ""}`}>
         {project.points.map((point) => (
@@ -86,7 +87,7 @@ export function Projects() {
           initial={reduce ? false : { opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.5 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.6, ease: EASE_OUT }}
           className="text-balance text-3xl font-semibold tracking-tight text-zinc-50 md:text-4xl"
         >
           Selected work

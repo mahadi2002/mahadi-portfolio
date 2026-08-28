@@ -1,4 +1,5 @@
 import { motion, useReducedMotion } from "motion/react";
+import { EASE_OUT } from "../lib/motion";
 import { GithubLogo, LinkedinLogo } from "@phosphor-icons/react";
 import { profile } from "../data";
 import { NetworkGraph } from "./NetworkGraph";
@@ -17,7 +18,7 @@ export function Hero() {
         <motion.div
           initial={reduce ? false : { opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.7, ease: EASE_OUT }}
         >
           <p className="font-mono text-xs tracking-[0.14em] text-amber-400/90">
             CSE UNDERGRADUATE, UIU / DHAKA
@@ -46,17 +47,17 @@ export function Hero() {
               href="/cv"
               className="inline-flex items-center rounded-full border border-white/15 px-6 py-3 text-sm font-medium text-zinc-100 transition-colors active:scale-[0.98] hover:border-amber-400/50 hover:text-amber-300"
             >
-              Download CV
+              Resume
             </a>
           </div>
 
-          <div className="mt-10 flex items-center gap-5 text-zinc-500">
+          <div className="mt-10 flex items-center gap-2 text-ink-dim">
             <a
               href={profile.github}
               target="_blank"
               rel="noreferrer"
               aria-label="GitHub profile"
-              className="transition-colors hover:text-amber-300"
+              className="-m-3 flex h-11 w-11 items-center justify-center rounded-full transition-colors hover:text-amber-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"
             >
               <GithubLogo size={20} weight="regular" />
             </a>
@@ -65,18 +66,19 @@ export function Hero() {
               target="_blank"
               rel="noreferrer"
               aria-label="LinkedIn profile"
-              className="transition-colors hover:text-amber-300"
+              className="-m-3 flex h-11 w-11 items-center justify-center rounded-full transition-colors hover:text-amber-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"
             >
               <LinkedinLogo size={20} weight="regular" />
             </a>
-            <span className="font-mono text-xs text-zinc-600">{profile.location}</span>
+            <span className="ml-1 font-mono text-xs text-ink-dim">{profile.location}</span>
           </div>
         </motion.div>
 
         <motion.div
           initial={reduce ? false : { opacity: 0, scale: 0.97 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
+          whileHover={reduce ? undefined : { scale: 1.02, transition: { duration: 0.25, ease: "easeOut" } }}
+          transition={{ duration: 0.9, ease: EASE_OUT, delay: 0.15 }}
           className="relative aspect-square w-full max-w-md justify-self-center lg:justify-self-end"
         >
           <div className="absolute inset-0 overflow-hidden rounded-2xl border border-white/10 bg-zinc-900/40">

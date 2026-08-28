@@ -217,6 +217,7 @@ export const nav = [
   { label: "About", href: "#about" },
   { label: "Research", href: "#research" },
   { label: "Projects", href: "#projects" },
+  { label: "Products", href: "#products" },
   { label: "Skills", href: "#skills" },
   { label: "Contact", href: "#contact" },
 ];
