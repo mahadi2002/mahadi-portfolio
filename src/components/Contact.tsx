@@ -127,7 +127,7 @@ export function Contact() {
                       initial={reduce ? false : { opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
-                      transition={{ duration: 0.15 }}
+                      transition={{ duration: 0.15, ease: EASE_OUT }}
                       className="inline-flex items-center gap-1 text-amber-300"
                     >
                       <Check size={12} /> Copied
@@ -138,7 +138,7 @@ export function Contact() {
                       initial={reduce ? false : { opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
-                      transition={{ duration: 0.15 }}
+                      transition={{ duration: 0.15, ease: EASE_OUT }}
                     >
                       Copy
                     </motion.span>
@@ -216,7 +216,7 @@ export function Contact() {
                   initial={reduce ? false : { opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.15 }}
+                  transition={{ duration: 0.15, ease: EASE_OUT }}
                   className="text-xs text-amber-300"
                 >
                   {errors.name}
@@ -249,7 +249,7 @@ export function Contact() {
                   initial={reduce ? false : { opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.15 }}
+                  transition={{ duration: 0.15, ease: EASE_OUT }}
                   className="text-xs text-amber-300"
                 >
                   {errors.email}
@@ -282,7 +282,7 @@ export function Contact() {
                   initial={reduce ? false : { opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.15 }}
+                  transition={{ duration: 0.15, ease: EASE_OUT }}
                   className="text-xs text-amber-300"
                 >
                   {errors.message}
@@ -305,7 +305,7 @@ export function Contact() {
                 initial={reduce ? false : { opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.2 }}
+                transition={{ duration: 0.2, ease: EASE_OUT }}
                 className="text-center text-xs text-amber-300"
               >
                 Message sent, thanks. I'll get back to you soon.
@@ -316,7 +316,7 @@ export function Contact() {
                 initial={reduce ? false : { opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.2 }}
+                transition={{ duration: 0.2, ease: EASE_OUT }}
                 className="text-center text-xs text-ink-dim"
               >
                 Your mail client should have opened with this addressed to me. If nothing happened, use the email above instead.
@@ -327,7 +327,7 @@ export function Contact() {
                 initial={reduce ? false : { opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.2 }}
+                transition={{ duration: 0.2, ease: EASE_OUT }}
                 className="text-center text-xs text-amber-300"
               >
                 Something went wrong sending that. Please try again, or email {profile.email} directly.

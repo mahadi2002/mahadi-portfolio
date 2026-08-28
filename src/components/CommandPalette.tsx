@@ -127,7 +127,7 @@ export function CommandPalette() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.15 }}
+            transition={{ duration: 0.15, ease: EASE_OUT }}
             className="fixed inset-0 z-[60] flex items-start justify-center bg-black/60 px-4 pt-[15vh]"
             onClick={() => setOpen(false)}
           >
