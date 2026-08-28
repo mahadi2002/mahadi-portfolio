@@ -9,6 +9,13 @@ export const profile = {
   linkedinHandle: "linkedin.com/in/mahadi-hasan-tanmay",
 };
 
+export const socials = [
+  { label: "X", href: "https://x.com/MHTanmay2002" },
+  { label: "Instagram", href: "https://www.instagram.com/therealmahadi2002/" },
+  { label: "Threads", href: "https://www.threads.com/@therealmahadi2002" },
+  { label: "Facebook", href: "http://facebook.com/therealmahadi2002" },
+];
+
 export const education = {
   degree: "B.Sc. in Computer Science and Engineering, Major in Data Science",
   school: "United International University, Dhaka",

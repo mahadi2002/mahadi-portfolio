@@ -1,5 +1,43 @@
-import { GithubLogo, LinkedinLogo, EnvelopeSimple } from "@phosphor-icons/react";
-import { profile, nav } from "../data";
+import {
+  GithubLogo,
+  LinkedinLogo,
+  EnvelopeSimple,
+  XLogo,
+  InstagramLogo,
+  ThreadsLogo,
+  FacebookLogo,
+  type IconProps,
+} from "@phosphor-icons/react";
+import { profile, socials, nav } from "../data";
+
+const socialIcons: Record<string, React.ComponentType<IconProps>> = {
+  X: XLogo,
+  Instagram: InstagramLogo,
+  Threads: ThreadsLogo,
+  Facebook: FacebookLogo,
+};
+
+function IconLink({
+  href,
+  label,
+  icon: Icon,
+}: {
+  href: string;
+  label: string;
+  icon: React.ComponentType<IconProps>;
+}) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      aria-label={label}
+      className="-m-3 flex h-11 w-11 items-center justify-center rounded-full transition-colors hover:text-amber-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"
+    >
+      <Icon size={18} />
+    </a>
+  );
+}
 
 export function Footer() {
   return (
@@ -17,25 +55,12 @@ export function Footer() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-1 text-ink-dim">
-          <a
-            href={profile.github}
-            target="_blank"
-            rel="noreferrer"
-            aria-label="GitHub"
-            className="-m-3 flex h-11 w-11 items-center justify-center rounded-full transition-colors hover:text-amber-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"
-          >
-            <GithubLogo size={18} />
-          </a>
-          <a
-            href={profile.linkedin}
-            target="_blank"
-            rel="noreferrer"
-            aria-label="LinkedIn"
-            className="-m-3 flex h-11 w-11 items-center justify-center rounded-full transition-colors hover:text-amber-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"
-          >
-            <LinkedinLogo size={18} />
-          </a>
+        <div className="flex flex-wrap items-center justify-center gap-1 text-ink-dim">
+          <IconLink href={profile.github} label="GitHub" icon={GithubLogo} />
+          <IconLink href={profile.linkedin} label="LinkedIn" icon={LinkedinLogo} />
+          {socials.map((s) => (
+            <IconLink key={s.label} href={s.href} label={s.label} icon={socialIcons[s.label]} />
+          ))}
           <a
             href={`mailto:${profile.email}`}
             aria-label="Email"
