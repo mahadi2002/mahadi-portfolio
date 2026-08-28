@@ -12,7 +12,6 @@ export function Hero() {
       <div className="pointer-events-none absolute inset-0 opacity-25">
         <NetworkGraph />
       </div>
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(9,9,11,0.2)_0%,rgba(9,9,11,0.75)_100%)]" />
 
       <div className="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-12 px-6 pt-24 pb-16 lg:grid-cols-[1.1fr_0.9fr] lg:gap-8 lg:pt-24">
         <motion.div
