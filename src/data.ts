@@ -22,7 +22,26 @@ export const education = {
   ],
 };
 
-export const certifications = ["Multiple professional courses completed through MyGP Academy"];
+export type Certification = { name: string; date: string; url: string };
+
+export const certifications = {
+  summary: "13 professional certifications from MyGP Academy, spanning AI tooling, UX design, and career skills.",
+  items: [
+    { name: "UX Research Strategy with AI", date: "23 Feb 2026", url: "https://www.grameenphone.academy/cert/625afd25e807" },
+    { name: "LinkedIn 101", date: "27 Feb 2026", url: "https://www.grameenphone.academy/cert/a2a79daf5b26" },
+    { name: "Smart CV", date: "27 Feb 2026", url: "https://www.grameenphone.academy/cert/e8b5157fb6a5" },
+    { name: "UX Design Decision-making with AI", date: "11 Mar 2026", url: "https://www.grameenphone.academy/cert/204a868bc729" },
+    { name: "Network Smarter with AI", date: "28 Apr 2026", url: "https://www.grameenphone.academy/cert/46639649a2c6" },
+    { name: "Personal Branding in AI Era", date: "10 May 2026", url: "https://www.grameenphone.academy/cert/5d81800ff848" },
+    { name: "GenAI & Prompt Engineering", date: "11 Jun 2026", url: "https://www.grameenphone.academy/cert/c5af765e22ba" },
+    { name: "AI Workflows and Agents", date: "21 Jun 2026", url: "https://www.grameenphone.academy/cert/6f66fe406d9a" },
+    { name: "Zero-Code App: Vibe Coding", date: "25 Jun 2026", url: "https://www.grameenphone.academy/cert/6afa8e0dae38" },
+    { name: "AI+ Superpresentations", date: "30 Jun 2026", url: "https://www.grameenphone.academy/cert/f87dea1eb56e" },
+    { name: "Expert AI Generalist", date: "30 Jun 2026", url: "https://www.grameenphone.academy/cert/971b9ad9cc28" },
+    { name: "AI-Pro Aptitude Hacks", date: "23 Jul 2026", url: "https://www.grameenphone.academy/cert/dec40189cd20" },
+    { name: "Data Foundations with AI", date: "17 Aug 2026", url: "https://www.grameenphone.academy/cert/260f86ee03d4" },
+  ] satisfies Certification[],
+};
 
 export const research = {
   title: "Agentic AI Security in Industrial Automation and Cyber-Physical Systems",

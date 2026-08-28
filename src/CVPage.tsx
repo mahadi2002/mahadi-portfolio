@@ -145,11 +145,25 @@ export function CVPage() {
           <p className="text-sm text-zinc-700">{leadership.point}</p>
         </Section>
 
-        <Section title="Certifications and languages">
-          <p className="text-sm text-zinc-700">{certifications.join(", ")}</p>
-          <p className="mt-1 text-sm text-zinc-700">
-            {languages.map((l) => `${l.name} (${l.level})`).join(", ")}
-          </p>
+        <Section title="Certifications">
+          <p className="text-xs text-zinc-500">{certifications.summary}</p>
+          <ul className="mt-2 space-y-1">
+            {certifications.items.map((c) => (
+              <li key={c.url} className="flex flex-wrap items-baseline justify-between gap-x-3 text-sm text-zinc-700">
+                <span>{c.name}</span>
+                <span className="text-xs text-zinc-500">
+                  {c.date} -{" "}
+                  <a href={c.url} target="_blank" rel="noreferrer" className="text-zinc-500 underline">
+                    verify
+                  </a>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </Section>
+
+        <Section title="Languages">
+          <p className="text-sm text-zinc-700">{languages.map((l) => `${l.name} (${l.level})`).join(", ")}</p>
         </Section>
 
         <p className="mt-8 border-t border-zinc-200 pt-3 text-center text-[10px] text-zinc-400">

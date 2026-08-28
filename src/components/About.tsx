@@ -76,13 +76,10 @@ export function About() {
             </ul>
 
             <p className="mt-6 font-mono text-xs uppercase tracking-[0.14em] text-zinc-600">Certifications</p>
-            <ul className="mt-3 space-y-1.5">
-              {certifications.map((c) => (
-                <li key={c} className="text-sm text-zinc-300">
-                  {c}
-                </li>
-              ))}
-            </ul>
+            <p className="mt-3 text-sm leading-relaxed text-zinc-300">{certifications.summary}</p>
+            <a href="/cv" className="mt-1.5 inline-block text-sm text-amber-400/90 hover:text-amber-300">
+              View all {certifications.items.length} on the CV
+            </a>
           </div>
 
           <div>
