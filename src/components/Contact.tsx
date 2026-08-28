@@ -22,9 +22,7 @@ const socialIcons: Record<string, React.ComponentType<IconProps>> = {
   Facebook: FacebookLogo,
 };
 
-// TODO: replace with your real Formspree endpoint (formspree.io -> new form -> "Your form endpoint").
-// Until this is set, submissions fall back to opening the visitor's mail client instead.
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/mgaeeepp";
 const FORMSPREE_CONFIGURED = !FORMSPREE_ENDPOINT.includes("YOUR_FORM_ID");
 
 type FormState = {
