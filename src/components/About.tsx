@@ -102,12 +102,6 @@ export function About() {
                 </li>
               ))}
             </ul>
-
-            <p className="mt-6 font-mono text-xs uppercase tracking-[0.14em] text-ink-dim">Certifications</p>
-            <p className="mt-3 text-sm leading-relaxed text-zinc-300">{certifications.summary}</p>
-            <a href="/cv" className="mt-1.5 inline-block text-sm text-amber-400/90 hover:text-amber-300">
-              View all {certifications.items.length} on the CV
-            </a>
           </div>
 
           <div>
@@ -115,6 +109,25 @@ export function About() {
             <p className="mt-3 text-sm text-zinc-300">Dhaka, Bangladesh</p>
             <p className="mt-1 text-sm text-ink-dim">Open to remote and on-site roles</p>
           </div>
+        </motion.div>
+
+        <motion.div
+          initial={reduce ? false : { opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.6, delay: 0.16, ease: EASE_OUT }}
+          className="mt-14 border-t border-white/8 pt-10"
+        >
+          <p className="font-mono text-xs uppercase tracking-[0.14em] text-ink-dim">Certifications</p>
+          <p className="mt-3 max-w-[65ch] text-sm leading-relaxed text-zinc-300">{certifications.summary}</p>
+          <ul className="mt-4 grid grid-cols-1 gap-x-8 gap-y-2 sm:grid-cols-2">
+            {certifications.items.map((c) => (
+              <li key={c.url} className="flex items-baseline justify-between gap-3 text-sm text-zinc-300">
+                <span>{c.name}</span>
+                <span className="shrink-0 font-mono text-xs text-ink-dim">{c.date}</span>
+              </li>
+            ))}
+          </ul>
         </motion.div>
       </div>
     </section>

@@ -10,7 +10,7 @@ export const profile = {
 };
 
 export const education = {
-  degree: "B.Sc. in Computer Science and Engineering",
+  degree: "B.Sc. in Computer Science and Engineering, Major in Data Science",
   school: "United International University, Dhaka",
   period: "Fall 2022 - Expected Summer 2027",
   gpa: "CGPA 3.53 / 4.00",
