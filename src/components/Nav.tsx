@@ -3,6 +3,7 @@ import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScro
 import { EASE_OUT } from "../lib/motion";
 import { List, X, DownloadSimple } from "@phosphor-icons/react";
 import { nav } from "../data";
+import { CommandPalette } from "./CommandPalette";
 
 export function Nav() {
   const reduce = useReducedMotion();
@@ -76,7 +77,8 @@ export function Nav() {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-4 lg:flex">
+        <div className="hidden items-center gap-3 lg:flex">
+          <CommandPalette />
           <a
             href="/cv"
             className="inline-flex items-center gap-2 rounded-full border border-white/12 px-4 py-2 text-sm text-zinc-100 transition-colors active:scale-[0.98] hover:border-amber-400/50 hover:text-amber-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"

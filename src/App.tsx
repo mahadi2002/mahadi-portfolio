@@ -8,10 +8,13 @@ import { Skills } from "./components/Skills";
 import { Leadership } from "./components/Leadership";
 import { Contact } from "./components/Contact";
 import { Footer } from "./components/Footer";
+import { ScrollProgress } from "./components/ScrollProgress";
+import { ScrollToTop } from "./components/ScrollToTop";
 
 function App() {
   return (
     <div className="min-h-dvh bg-zinc-950">
+      <ScrollProgress />
       <Nav />
       <main>
         <Hero />
@@ -24,6 +27,7 @@ function App() {
         <Contact />
       </main>
       <Footer />
+      <ScrollToTop />
     </div>
   );
 }
