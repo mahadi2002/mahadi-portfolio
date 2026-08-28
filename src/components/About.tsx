@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { animate, motion, useInView, useReducedMotion } from "motion/react";
+import { ArrowSquareOut } from "@phosphor-icons/react";
 import { EASE_OUT } from "../lib/motion";
 import { certifications, education, languages, projects, productSeries } from "../data";
 
@@ -120,11 +121,23 @@ export function About() {
         >
           <p className="font-mono text-xs uppercase tracking-[0.14em] text-ink-dim">Certifications</p>
           <p className="mt-3 max-w-[65ch] text-sm leading-relaxed text-zinc-300">{certifications.summary}</p>
-          <ul className="mt-4 grid grid-cols-1 gap-x-8 gap-y-2 sm:grid-cols-2">
+          <ul className="mt-4 grid grid-cols-1 gap-x-8 gap-y-1 sm:grid-cols-2">
             {certifications.items.map((c) => (
               <li key={c.url} className="flex items-baseline justify-between gap-3 text-sm text-zinc-300">
                 <span>{c.name}</span>
-                <span className="shrink-0 font-mono text-xs text-ink-dim">{c.date}</span>
+                <span className="flex shrink-0 items-baseline gap-3">
+                  <span className="font-mono text-xs text-ink-dim">{c.date}</span>
+                  <a
+                    href={c.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`Verify ${c.name} certificate`}
+                    className="-my-2 -mr-2 flex items-center gap-1 rounded p-2 text-xs text-amber-400/90 transition-colors hover:text-amber-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"
+                  >
+                    <ArrowSquareOut size={12} />
+                    Verify
+                  </a>
+                </span>
               </li>
             ))}
           </ul>
