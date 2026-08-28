@@ -1,8 +1,26 @@
 import { useRef, useState, type FormEvent } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { EASE_OUT } from "../lib/motion";
-import { EnvelopeSimple, GithubLogo, LinkedinLogo, Phone, Check } from "@phosphor-icons/react";
-import { profile } from "../data";
+import {
+  EnvelopeSimple,
+  GithubLogo,
+  LinkedinLogo,
+  Phone,
+  Check,
+  XLogo,
+  InstagramLogo,
+  ThreadsLogo,
+  FacebookLogo,
+  type IconProps,
+} from "@phosphor-icons/react";
+import { profile, socials } from "../data";
+
+const socialIcons: Record<string, React.ComponentType<IconProps>> = {
+  X: XLogo,
+  Instagram: InstagramLogo,
+  Threads: ThreadsLogo,
+  Facebook: FacebookLogo,
+};
 
 // TODO: replace with your real Formspree endpoint (formspree.io -> new form -> "Your form endpoint").
 // Until this is set, submissions fall back to opening the visitor's mail client instead.
@@ -44,10 +62,17 @@ export function Contact() {
     return next;
   }
 
+  function updateField(field: keyof FormState, value: string) {
+    setForm((f) => ({ ...f, [field]: value }));
+    if (errors[field]) setErrors((e) => ({ ...e, [field]: undefined }));
+    if (status !== "idle") setStatus("idle");
+  }
+
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const nextErrors = validate(form);
     setErrors(nextErrors);
+    setStatus("idle");
 
     const firstInvalid = (Object.keys(nextErrors) as (keyof FormState)[])[0];
     if (firstInvalid) {
@@ -60,7 +85,6 @@ export function Contact() {
       const body = encodeURIComponent(`${form.message}\n\n- ${form.name} (${form.email})`);
       window.location.href = `mailto:${profile.email}?subject=${subject}&body=${body}`;
       setStatus("sent-fallback");
-      setForm(initialState);
       return;
     }
 
@@ -175,6 +199,27 @@ export function Contact() {
               {profile.githubHandle}
             </a>
           </div>
+
+          <div className="mt-6">
+            <p className="font-mono text-xs uppercase tracking-[0.14em] text-ink-dim">Elsewhere</p>
+            <div className="mt-3 flex items-center gap-1 text-ink-dim">
+              {socials.map((s) => {
+                const Icon = socialIcons[s.label];
+                return (
+                  <a
+                    key={s.label}
+                    href={s.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={s.label}
+                    className="-m-3 flex h-11 w-11 items-center justify-center rounded-full transition-colors hover:text-amber-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400"
+                  >
+                    <Icon size={18} />
+                  </a>
+                );
+              })}
+            </div>
+          </div>
         </motion.div>
 
         <motion.form
@@ -189,6 +234,7 @@ export function Contact() {
           <p aria-live="polite" className="sr-only">
             {errorCount > 0 ? `${errorCount} field${errorCount > 1 ? "s" : ""} need attention.` : ""}
             {status === "sent" ? "Message sent." : ""}
+            {status === "sent-fallback" ? "Mail client opened, addressed to Mahadi. If nothing happened, use the email address above instead." : ""}
             {status === "error" ? "Message failed to send. Please try again or use the email above." : ""}
           </p>
 
@@ -203,7 +249,7 @@ export function Contact() {
               type="text"
               maxLength={100}
               value={form.name}
-              onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+              onChange={(e) => updateField("name", e.target.value)}
               className="w-full rounded-lg border border-white/12 bg-zinc-950 px-4 py-3 text-sm text-zinc-100 placeholder:text-ink-dim focus:border-amber-400/60 focus:outline-none focus:ring-2 focus:ring-amber-400/30"
               placeholder="Jane Rahman"
               aria-invalid={Boolean(errors.name)}
@@ -236,7 +282,7 @@ export function Contact() {
               type="email"
               maxLength={150}
               value={form.email}
-              onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+              onChange={(e) => updateField("email", e.target.value)}
               className="w-full rounded-lg border border-white/12 bg-zinc-950 px-4 py-3 text-sm text-zinc-100 placeholder:text-ink-dim focus:border-amber-400/60 focus:outline-none focus:ring-2 focus:ring-amber-400/30"
               placeholder="jane@company.com"
               aria-invalid={Boolean(errors.email)}
@@ -269,7 +315,7 @@ export function Contact() {
               rows={5}
               maxLength={2000}
               value={form.message}
-              onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
+              onChange={(e) => updateField("message", e.target.value)}
               className="w-full resize-none rounded-lg border border-white/12 bg-zinc-950 px-4 py-3 text-sm text-zinc-100 placeholder:text-ink-dim focus:border-amber-400/60 focus:outline-none focus:ring-2 focus:ring-amber-400/30"
               placeholder="What are you working on?"
               aria-invalid={Boolean(errors.message)}
