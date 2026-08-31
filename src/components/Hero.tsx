@@ -1,11 +1,28 @@
-import { motion, useReducedMotion } from "motion/react";
-import { EASE_OUT } from "../lib/motion";
+import { motion, useMotionValue, useReducedMotion, useTransform } from "motion/react";
+import { EASE_OUT, SPRING_HOVER, SPRING_TAP } from "../lib/motion";
 import { GithubLogo, LinkedinLogo } from "@phosphor-icons/react";
 import { profile } from "../data";
 import { NetworkGraph } from "./NetworkGraph";
 
 export function Hero() {
   const reduce = useReducedMotion();
+
+  const pointerX = useMotionValue(0);
+  const pointerY = useMotionValue(0);
+  const rotateX = useTransform(pointerY, [-0.5, 0.5], [7, -7]);
+  const rotateY = useTransform(pointerX, [-0.5, 0.5], [-7, 7]);
+
+  function handlePortraitMove(e: React.MouseEvent<HTMLDivElement>) {
+    if (reduce) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    pointerX.set((e.clientX - rect.left) / rect.width - 0.5);
+    pointerY.set((e.clientY - rect.top) / rect.height - 0.5);
+  }
+
+  function resetPortraitTilt() {
+    pointerX.set(0);
+    pointerY.set(0);
+  }
 
   return (
     <section id="top" className="relative flex min-h-[100dvh] items-center overflow-hidden border-b border-white/8">
@@ -36,18 +53,20 @@ export function Hero() {
           </p>
 
           <div className="mt-9 flex flex-wrap items-center gap-4">
-            <a
+            <motion.a
               href="#projects"
-              className="inline-flex items-center rounded-full bg-amber-400 px-6 py-3 text-sm font-medium text-zinc-950 transition-transform active:scale-[0.98] hover:bg-amber-300"
+              whileTap={reduce ? undefined : { scale: 0.96, transition: SPRING_TAP }}
+              className="inline-flex items-center rounded-full bg-amber-400 px-6 py-3 text-sm font-medium text-zinc-950 transition-colors hover:bg-amber-300"
             >
               View projects
-            </a>
-            <a
+            </motion.a>
+            <motion.a
               href="/cv"
-              className="inline-flex items-center rounded-full border border-white/15 px-6 py-3 text-sm font-medium text-zinc-100 transition-colors active:scale-[0.98] hover:border-amber-400/50 hover:text-amber-300"
+              whileTap={reduce ? undefined : { scale: 0.96, transition: SPRING_TAP }}
+              className="inline-flex items-center rounded-full border border-white/15 px-6 py-3 text-sm font-medium text-zinc-100 transition-colors hover:border-amber-400/50 hover:text-amber-300"
             >
               Resume
-            </a>
+            </motion.a>
           </div>
 
           <div className="mt-10 flex items-center gap-2 text-ink-dim">
@@ -76,8 +95,11 @@ export function Hero() {
         <motion.div
           initial={reduce ? false : { opacity: 0, scale: 0.97 }}
           animate={{ opacity: 1, scale: 1 }}
-          whileHover={reduce ? undefined : { scale: 1.02, transition: { duration: 0.25, ease: "easeOut" } }}
+          whileHover={reduce ? undefined : { scale: 1.02, transition: SPRING_HOVER }}
           transition={{ duration: 0.9, ease: EASE_OUT, delay: 0.15 }}
+          onMouseMove={handlePortraitMove}
+          onMouseLeave={resetPortraitTilt}
+          style={{ rotateX, rotateY, transformPerspective: 800 }}
           className="relative aspect-square w-full max-w-md justify-self-center lg:justify-self-end"
         >
           <div className="absolute inset-0 overflow-hidden rounded-2xl border border-white/10 bg-zinc-900/40">

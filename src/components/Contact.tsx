@@ -1,6 +1,6 @@
 import { useRef, useState, type FormEvent } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { EASE_OUT } from "../lib/motion";
+import { EASE_OUT, SPRING_TAP } from "../lib/motion";
 import {
   EnvelopeSimple,
   GithubLogo,
@@ -335,13 +335,14 @@ export function Contact() {
             </AnimatePresence>
           </div>
 
-          <button
+          <motion.button
             type="submit"
             disabled={status === "sending"}
-            className="w-full rounded-lg bg-amber-400 px-6 py-3 text-sm font-medium text-zinc-950 transition-transform active:scale-[0.98] hover:bg-amber-300 disabled:opacity-60"
+            whileTap={reduce ? undefined : { scale: 0.98, transition: SPRING_TAP }}
+            className="w-full rounded-lg bg-amber-400 px-6 py-3 text-sm font-medium text-zinc-950 transition-colors hover:bg-amber-300 disabled:opacity-60"
           >
             {status === "sending" ? "Sending..." : "Send message"}
-          </button>
+          </motion.button>
 
           <AnimatePresence initial={false}>
             {status === "sent" && (

@@ -6,7 +6,7 @@ import { certifications, education, languages, projects, productSeries } from ".
 
 const stats = [
   { value: String(projects.length + productSeries.products.length), label: "Projects and products shipped" },
-  { value: education.gpa.replace("CGPA ", ""), label: "Undergraduate CGPA" },
+  { value: education.gpa, label: "Undergraduate CGPA" },
   { value: "1", label: "Undergraduate thesis, in progress" },
 ];
 
@@ -83,7 +83,7 @@ export function About() {
             <p className="mt-3 text-base text-zinc-100">{education.degree}</p>
             <p className="mt-1 text-sm text-ink-dim">{education.school}</p>
             <p className="mt-1 text-sm text-ink-dim">{education.period}</p>
-            <p className="mt-1 font-mono text-sm text-amber-400/90">{education.gpa}</p>
+            <p className="mt-1 font-mono text-sm text-amber-400/90">{education.gpa} CGPA</p>
             <p className="mt-2 text-xs leading-relaxed text-ink-dim">{education.notes}</p>
             <ul className="mt-3 space-y-0.5">
               {education.earlier.map((e) => (

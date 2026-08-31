@@ -13,7 +13,7 @@ import {
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="mt-6 first:mt-0">
+    <section className="mt-6 break-inside-avoid first:mt-0">
       <h2 className="border-b border-zinc-300 pb-1 text-xs font-bold uppercase tracking-[0.1em] text-zinc-700">
         {title}
       </h2>
@@ -31,7 +31,7 @@ export function CVPage() {
 
   return (
     <div className="min-h-dvh bg-zinc-200 py-10 print:bg-white print:py-0">
-      <div className="no-print mx-auto mb-6 flex max-w-[820px] items-center justify-between px-6 print:hidden">
+      <div className="mx-auto mb-6 flex max-w-[820px] items-center justify-between px-6 print:hidden">
         <a href="/" className="inline-flex items-center gap-2 text-sm text-zinc-700 hover:text-zinc-950">
           <ArrowLeft size={16} />
           Back to portfolio
@@ -46,21 +46,31 @@ export function CVPage() {
         </button>
       </div>
 
-      <div className="mx-auto max-w-[820px] bg-white px-10 py-12 text-zinc-800 shadow-xl print:max-w-none print:px-0 print:py-0 print:shadow-none">
+      <main className="mx-auto max-w-[820px] bg-white px-10 py-12 text-zinc-800 shadow-xl print:max-w-none print:px-0 print:py-0 print:shadow-none">
         <header className="text-center">
           <h1 className="text-2xl font-bold tracking-tight text-zinc-950">{profile.name}</h1>
           <p className="mt-1.5 text-sm text-zinc-600">
-            {profile.location} - {profile.phone} - {profile.email}
+            {profile.location} -{" "}
+            <a href={`tel:${profile.phone.replace(/\s+/g, "")}`} className="text-zinc-600 no-underline">
+              {profile.phone}
+            </a>{" "}
+            - <a href={`mailto:${profile.email}`} className="text-zinc-600 no-underline">{profile.email}</a>
           </p>
           <p className="mt-1 text-sm text-zinc-600">
-            {profile.linkedinHandle} - {profile.githubHandle}
+            <a href={profile.linkedin} target="_blank" rel="noreferrer" className="text-zinc-600 no-underline">
+              {profile.linkedinHandle}
+            </a>{" "}
+            -{" "}
+            <a href={profile.github} target="_blank" rel="noreferrer" className="text-zinc-600 no-underline">
+              {profile.githubHandle}
+            </a>
           </p>
         </header>
 
         <Section title="Education">
           <p className="text-sm font-semibold text-zinc-900">{education.degree}</p>
           <p className="text-sm text-zinc-600">
-            {education.school} - {education.period} - {education.gpa}
+            {education.school} - {education.period} - {education.gpa} CGPA
           </p>
           <p className="mt-1 text-xs text-zinc-500">{education.notes}</p>
           {education.earlier.map((e) => (
@@ -169,7 +179,7 @@ export function CVPage() {
         <p className="mt-8 border-t border-zinc-200 pt-3 text-center text-[10px] text-zinc-400">
           Generated on {generatedOn} from {profile.name}'s portfolio at mahadihasantanmay.com - always current with the live site.
         </p>
-      </div>
+      </main>
 
       <style>{`
         @media print {

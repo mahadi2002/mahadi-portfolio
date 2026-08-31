@@ -1,5 +1,5 @@
 import { motion, useReducedMotion } from "motion/react";
-import { EASE_OUT } from "../lib/motion";
+import { EASE_OUT, SPRING_HOVER } from "../lib/motion";
 import { GithubLogo } from "@phosphor-icons/react";
 import { productSeries } from "../data";
 
@@ -39,11 +39,12 @@ export function Products() {
           {productSeries.products.map((product, i) => (
             <motion.div
               key={product.slug}
-              initial={reduce ? false : { opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={reduce ? false : { opacity: 0, y: 20, scale: 0.98 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, amount: 0.3 }}
+              whileHover={reduce ? undefined : { y: -4, transition: SPRING_HOVER }}
               transition={{ duration: 0.5, delay: i * 0.06, ease: EASE_OUT }}
-              className={`flex flex-col rounded-2xl border border-white/10 bg-white/[0.02] p-6 transition duration-200 hover:border-white/20 motion-safe:hover:-translate-y-1 ${cardBackgrounds[i % cardBackgrounds.length]}`}
+              className={`flex flex-col rounded-2xl border border-white/10 bg-white/[0.02] p-6 transition-colors duration-200 hover:border-white/20 ${cardBackgrounds[i % cardBackgrounds.length]}`}
             >
               <div className="flex items-start justify-between gap-3">
                 <div>
