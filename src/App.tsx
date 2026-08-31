@@ -1,6 +1,5 @@
 import { Nav } from "./components/Nav";
 import { Hero } from "./components/Hero";
-import { GithubActivity } from "./components/GithubActivity";
 import { About } from "./components/About";
 import { Research } from "./components/Research";
 import { Projects } from "./components/Projects";
@@ -19,7 +18,6 @@ function App() {
       <Nav />
       <main>
         <Hero />
-        <GithubActivity />
         <About />
         <Research />
         <Projects />
