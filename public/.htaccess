@@ -1,19 +1,9 @@
-# Force HTTPS
-RewriteEngine On
-RewriteCond %{HTTPS} off
-RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-
-# Long-cache hashed static assets
-<IfModule mod_expires.c>
-  ExpiresActive On
-  ExpiresByType text/css "access plus 1 year"
-  ExpiresByType application/javascript "access plus 1 year"
-  ExpiresByType font/woff2 "access plus 1 year"
-  ExpiresByType font/woff "access plus 1 year"
-  ExpiresByType image/svg+xml "access plus 1 year"
+# Serve index.html for any request that isn't a real file or directory,
+# so the client-side /cv route works the same way Vercel's rewrite did.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
 </IfModule>
-
-# Never cache the HTML shell
-<FilesMatch "\.html$">
-  Header set Cache-Control "no-cache"
-</FilesMatch>
